@@ -1,5 +1,7 @@
+import { Game } from "./core/game";
+
 function App() {
-  return <div />;
+  return <Game />;
 }
 
 export default App;

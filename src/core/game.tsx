@@ -22,14 +22,47 @@ function Ball() {
   )
 }
 
+const ROTATION = [Math.PI / 2, 0, 0]
+
 function Board() {
   return (
-    <RigidBody colliders="cuboid" position={[0, 0, 0]} restitution={1.2} rotation={[Math.PI / 2, 0, 0]} type="fixed">
-      <mesh>
-        <boxGeometry args={[4, 5, 0.1]} />
-        <meshStandardMaterial color="#107ab0" />
-      </mesh>
-    </RigidBody>
+    <>
+      <RigidBody colliders="cuboid" position={[0, 0, 0]} restitution={1.2} rotation={ROTATION} type="fixed">
+        <mesh>
+          <boxGeometry args={[4, 5, 0.1]} />
+          <meshStandardMaterial color="#107ab0" />
+        </mesh>
+      </RigidBody>
+
+      <RigidBody colliders="cuboid" position={[0, 0.05, -2.5]} rotation={ROTATION} type="fixed">
+        <mesh>
+          <boxGeometry args={[4.1, 0.1, 0.2]} />
+          <meshStandardMaterial color="black" />
+        </mesh>
+      </RigidBody>
+
+      <RigidBody colliders="cuboid" position={[0, 0.05, 2.5]} rotation={ROTATION} type="fixed">
+        <mesh>
+          <boxGeometry args={[4.1, 0.1, 0.2]} />
+          <meshStandardMaterial color="black" />
+        </mesh>
+      </RigidBody>
+
+      <RigidBody colliders="cuboid" position={[2, 0.05, 0]} rotation={ROTATION} type="fixed">
+        <mesh>
+          <boxGeometry args={[0.1, 5.1, 0.2]} />
+          <meshStandardMaterial color="black" />
+        </mesh>
+      </RigidBody>
+
+      <RigidBody colliders="cuboid" position={[-2, 0.05, 0]} rotation={ROTATION} type="fixed">
+        <mesh>
+          <boxGeometry args={[0.1, 5.1, 0.2]} />
+          <meshStandardMaterial color="black" />
+        </mesh>
+      </RigidBody>
+
+    </>
   )
 }
 

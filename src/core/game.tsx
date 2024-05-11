@@ -1,7 +1,7 @@
 import { Canvas, useThree } from "@react-three/fiber";
 import { CuboidCollider, Physics, RigidBody } from "@react-three/rapier"
-import { useRef } from "react";
-import { PerspectiveCamera } from "three";
+import { useEffect, useRef } from "react";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 
 function Ball() {
   const ref = useRef()
@@ -10,8 +10,8 @@ function Ball() {
   return (
     <>
       <RigidBody ref={ref} colliders="ball" mass={1}>
-        <mesh>
-          <sphereGeometry args={[0.75, 32, 32]} />
+        <mesh position={[0, 1.5, 0]}>
+          <sphereGeometry args={[0.35, 32, 32]} />
           <meshStandardMaterial color="red" />
         </mesh>
       </RigidBody>
@@ -24,32 +24,70 @@ function Ball() {
 
 function Board() {
   return (
-    <RigidBody colliders="cuboid" position={[0, 0, 0]} restitution={1} rotation={[Math.PI / 2, 0, 0]} type="fixed">
+    <RigidBody colliders="cuboid" position={[0, 0, 0]} restitution={1.2} rotation={[Math.PI / 2, 0, 0]} type="fixed">
       <mesh>
-        <boxGeometry args={[4, 5]} />
-        <meshStandardMaterial color="#f1f1f1" />
+        <boxGeometry args={[4, 5, 0.1]} />
+        <meshStandardMaterial color="#107ab0" />
       </mesh>
     </RigidBody>
   )
 }
 
 function CameraHelper() {
-  const camera = new PerspectiveCamera(75, 1, 0.1);
+  const { camera } = useThree();
+  const cameraRef = useRef(camera)
+
+  useEffect(() => {
+    const logCameraPosition = () => {
+      const { x, y, z } = cameraRef.current.position
+      const roundedX = Math.round(x * 100) / 100
+      const roundedY = Math.round(y * 100) / 100
+      const roundedZ = Math.round(z * 100) / 100
+
+      console.log(`Camera position: (x: ${roundedX}, y: ${roundedY}, z: ${roundedZ})`)
+
+    }
+
+    cameraRef.current = camera;
+    window.addEventListener('mousedown', logCameraPosition)
+
+    return () => window.removeEventListener('mousedown', logCameraPosition)
+  }, [])
+
   return (
-    <group position={[0, 0, 5]}>
+    <group position={camera.position}>
       <cameraHelper args={[camera]} />
     </group>
   )
 }
 
-export function Game() {
+function Camera() {
 
   return (
-    <Canvas camera={{ fov: 75, near: 0.1, position: [0, 0, 5] }} >
-      <color attach="background" args={["#e3daf7"]} />
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} />
+    <>
+      <PerspectiveCamera
+        makeDefault
+        name="camera"
+        zoom={0.75}
+        fov={95}
+        near={0.1}
+        far={100}
+        position={[0, Math.PI, Math.PI / 4]}
+        rotation={[0, 0, 0]}
+      />
       <CameraHelper />
+    </>
+  )
+}
+
+export function Game() {
+  return (
+    <Canvas>
+      <color attach="background" args={["#e3daf7"]} />
+      <ambientLight intensity={2} />
+      <pointLight position={[10, 10, 10]} />
+      <OrbitControls />
+      <Camera />
 
 
       <Physics>

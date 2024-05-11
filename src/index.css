@@ -1,7 +1,8 @@
 
 html, body, #root {
 	height: 100%;
-	width: 100%;
+	/* width: 100%; */
+	aspect-ration:16/9;
 	margin: auto;
 }
 
